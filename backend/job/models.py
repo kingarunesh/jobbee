@@ -50,7 +50,7 @@ class Job(models.Model):
     education = models.CharField(max_length=10, choices=Education.choices, default=Education.Bachelors)
     industry = models.CharField(max_length=30, choices=Industry.choices, default=Industry.Business)
     experience = models.CharField(max_length=20, choices=Experience.choices, default=Experience.NO_EXPERIENCE)
-    salary = models.IntegerField(default=1, validators=[MinValueValidator(1)]), MaxValueValidator(1000000)
+    salary = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(1000000)])
     positions = models.IntegerField(default=1)
     company = models.CharField(max_length=100, null=True)
     point = gismodels.PointField(default=Point(0.0, 0.0))
