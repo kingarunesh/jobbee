@@ -6,4 +6,5 @@ urlpatterns = [
     path("register/", view=views.register, name="register"),
     path("me/", view=views.currentUser, name="current_user"),
     path("me/update/", view=views.updateUser, name="update_user"),
+    path("upload/resume/", view=views.uploadResume, name="upload_resume"),
 ]

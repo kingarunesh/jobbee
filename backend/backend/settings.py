@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
-    'account.apps.AccountConfig'
+    'account.apps.AccountConfig',
+    'storages'
 ]
 
 MIDDLEWARE = [
