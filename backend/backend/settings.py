@@ -33,8 +33,6 @@ DEBUG = os.environ.get('DEBUG') == "True"
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '111.222.333.444',
-    'mywebsite.example'
 ]
 
 
@@ -152,6 +150,7 @@ GDAL_LIBRARY_PATH = VIRTUAL_ENV_BASE + '/Lib/site-packages/osgeo/gdal304.dll'
 
 #!      JWT Setups
 REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'utils.custom_exception_handler.custom_exception_handler',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
