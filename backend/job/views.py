@@ -1,18 +1,23 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from job.models import Job
-from job.serializers import JobSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.db.models import Min, Max, Avg, Count
+
+from job.models import Job
+from job.serializers import JobSerializer
+from job.filters import JobsFilter
 
 
 #!  Get All Jobs
 @api_view(["GET"])
 def getAllJobs(request):
-    jobs = Job.objects.all()
-    serializer = JobSerializer(jobs, many=True)
-    return Response(serializer.data)
+    
+    filterset = JobsFilter(request.GET, queryset=Job.objects.all().order_by("id"))
+
+    serializer = JobSerializer(filterset.qs, many=True)
+    # return Response(serializer.data)
+    return Response({"total jobs": len(serializer.data), "jobs": serializer.data})
 
 
 
