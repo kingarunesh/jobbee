@@ -4,6 +4,7 @@ from job.models import Job
 from job.serializers import JobSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from django.db.models import Min, Max, Avg, Count
 
 
 #!  Get All Jobs
@@ -70,3 +71,24 @@ def deleteJob(request, pk):
     job.delete()
 
     return Response({"Message": "Job Delete"}, status=status.HTTP_200_OK)
+
+
+#!  Get Stats
+@api_view(["GET"])
+def getTopicStats(request, topic):
+    args = {"title__icontains": topic}
+
+    jobs = Job.objects.filter(**args)
+
+    if len(jobs) == 0:
+        return Response({"message": "Not stats found for {topic}".format(topic=topic)})
+    
+    stats = jobs.aggregate(
+        total_jobs = Count("title"),
+        avg_positions = Avg("positions"),
+        avg_salary = Avg("salary"),
+        min_salary = Min("salary"),
+        max_salary = Max("salary")
+    )
+
+    return Response(stats)
