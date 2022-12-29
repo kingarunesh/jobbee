@@ -1,5 +1,6 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.db.models import Min, Max, Avg, Count
@@ -47,7 +48,11 @@ def getJob(request, pk):
 
 #!  New Job
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def newJob(request):
+
+    request.data["user"] = request.user
+
     data = request.data
 
     job = Job.objects.create(**data)
@@ -60,8 +65,12 @@ def newJob(request):
 
 #!  Update Job
 @api_view(["PUT"])
+@permission_classes([IsAuthenticated])
 def updateJob(request, pk):
     job = get_object_or_404(Job, id=pk)
+
+    if job.user != request.user:
+        return Response({"message": "You can not update this job."}, status=status.HTTP_403_FORBIDDEN)
 
     job.title = request.data["title"]
     job.description = request.data["description"]
@@ -85,8 +94,12 @@ def updateJob(request, pk):
 
 #!  Delete Job
 @api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
 def deleteJob(request, pk):
     job = get_object_or_404(Job, id=pk)
+
+    if job.user != request.user:
+        return Response({"message": "You can not update this job."}, status=status.HTTP_403_FORBIDDEN)
 
     job.delete()
 
