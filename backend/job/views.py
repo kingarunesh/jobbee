@@ -20,3 +20,16 @@ def getJob(request, pk):
     job = get_object_or_404(Job, id=pk)
     serializer = JobSerializer(job, many=False)
     return Response(serializer.data)
+
+
+
+#!  New Job
+@api_view(["POST"])
+def newJob(request):
+    data = request.data
+
+    job = Job.objects.create(**data)
+
+    serializer = JobSerializer(job, many=False)
+
+    return Response(serializer.data)
