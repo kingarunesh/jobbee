@@ -8,7 +8,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.utils import timezone
 
 from job.models import Job, CandidatesApplied
-from job.serializers import JobSerializer
+from job.serializers import JobSerializer, CandidatesAppliedSerializer
 from job.filters import JobsFilter
 
 
@@ -159,3 +159,18 @@ def applyToJob(request, pk):
     )
 
     return Response({ "applied": True, "job_id": jobApplied.id }, status=status.HTTP_200_OK)
+
+
+
+#!  Current User Applied All Jobs
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def getCurrentUserAppliedJobs(request):
+    
+    args = {"user_id": request.user.id}
+
+    jobs = CandidatesApplied.objects.filter(**args)
+
+    serializer = CandidatesAppliedSerializer(jobs, many=True)
+
+    return Response(serializer.data)
