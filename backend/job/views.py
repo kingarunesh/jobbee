@@ -5,8 +5,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.db.models import Min, Max, Avg, Count
 from rest_framework.pagination import PageNumberPagination
+from django.utils import timezone
 
-from job.models import Job
+from job.models import Job, CandidatesApplied
 from job.serializers import JobSerializer
 from job.filters import JobsFilter
 
@@ -125,3 +126,36 @@ def getTopicStats(request, topic):
     )
 
     return Response(stats)
+
+
+
+
+#!  Apply To Job
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def applyToJob(request, pk):
+
+    user = request.user
+    job = get_object_or_404(Job, id=pk)
+
+    if user.userprofile.resume == "":
+        return Response({"error": "Please upload your resume."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    if job.lastDate < timezone.now():
+        return Response({"error": "You can not apply to this job, date is over."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    alreadyApplied = job.candidatesapplied_set.filter(user=user).exists()
+
+    print(alreadyApplied)
+
+    if alreadyApplied:
+        return Response({"error": "You have already applied for this job"}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    jobApplied = CandidatesApplied.objects.create(
+        job=job,
+        user=user,
+        resume=user.userprofile.resume
+    )
+
+    return Response({ "applied": True, "job_id": jobApplied.id }, status=status.HTTP_200_OK)
