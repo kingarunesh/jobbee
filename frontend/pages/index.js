@@ -8,7 +8,7 @@ export default function Index({ data }) {
     return (
         <>
             <Layout>
-                <Home />
+                <Home data={data} />
             </Layout>
         </>
     );

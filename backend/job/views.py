@@ -31,8 +31,8 @@ def getAllJobs(request):
     serializer = JobSerializer(queryset, many=True)
 
     return Response({
-        "total jobs": total_jobs,
-        "Results Per Page": resPerPage, 
+        "count": total_jobs,
+        "resPerPage": resPerPage, 
         "jobs": serializer.data
         })
 
