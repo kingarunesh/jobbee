@@ -12,5 +12,6 @@ urlpatterns = [
     path("jobs/<str:pk>/apply/", view=views.applyToJob, name="apply_to_job"),
     path("me/jobs/applied/", view=views.getCurrentUserAppliedJobs, name="current_user_applied_jobs"),
     path("me/jobs/", view=views.getCurrentUserJobs, name="current_user_jobs"),
-    path("jobs/<str:pk>/check/", view=views.isApplied, name="is_apply_to_job")
+    path("jobs/<str:pk>/check/", view=views.isApplied, name="is_apply_to_job"),
+    path("jobs/<str:pk>/condidates/", view=views.getCondidateAppliedJob, name="condidates_apply_job")
 ]

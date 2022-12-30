@@ -204,3 +204,25 @@ def getCurrentUserJobs(request):
     serializer = JobSerializer(jobs, many=True)
 
     return Response(serializer.data)
+
+
+
+
+#!  candidate applied for job
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def getCondidateAppliedJob(request, pk):
+    
+    user = request.user
+
+    job = get_object_or_404(Job, id=pk)
+
+    if job.user != user:
+        return Response({"error": "You do not have permission to check condidates"}, status=status.HTTP_403_FORBIDDEN)
+    
+
+    condidates = job.candidatesapplied_set.all()
+
+    serializer = CandidatesAppliedSerializer(condidates, many=True)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)
