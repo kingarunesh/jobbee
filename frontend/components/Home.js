@@ -1,8 +1,13 @@
 import Link from "next/link";
 import JobItem from "./job/JobItem";
+import { useRouter } from "next/router";
 
 const Home = ({ data }) => {
     const { jobs, count, resParPage } = data;
+
+    const router = useRouter();
+
+    const { keyword } = router.query;
 
     return (
         <>
@@ -12,7 +17,7 @@ const Home = ({ data }) => {
 
                     <div className="col-xl-9 col-lg-8 content-left-offset">
                         <div className="my-5">
-                            <h4 className="page-title">Latest Jobs</h4>
+                            <h4 className="page-title">{keyword ? `${jobs.length} Results for ${keyword}` : "Latest Jobs"}</h4>
                             <Link href="/stats">
                                 <button className="btn btn-secondary float-right stats_btn">Get Topic stats</button>
                             </Link>
