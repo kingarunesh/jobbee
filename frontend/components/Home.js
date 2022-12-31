@@ -1,13 +1,34 @@
 import Link from "next/link";
 import JobItem from "./job/JobItem";
 import { useRouter } from "next/router";
+import Pagination from "react-js-pagination";
 
 const Home = ({ data }) => {
-    const { jobs, count, resParPage } = data;
+    const { jobs, count, resPerPage } = data;
 
     const router = useRouter();
 
-    const { keyword } = router.query;
+    let { page = 1, keyword } = router.query;
+
+    page = Number(page);
+
+    let queryParams;
+
+    if (typeof window !== "undefined") {
+        queryParams = new URLSearchParams(window.location.search);
+    }
+
+    const handlePageClick = (currentPage) => {
+        if (queryParams.has("page")) {
+            queryParams.set("page", currentPage);
+        } else {
+            queryParams.append("page", currentPage);
+        }
+
+        router.push({
+            search: queryParams.toString(),
+        });
+    };
 
     return (
         <>
@@ -25,8 +46,24 @@ const Home = ({ data }) => {
                                 <Link href="/search">Go to Search</Link>
                             </div>
                         </div>
-
                         {jobs && jobs.map((job) => <JobItem key={job.id} job={job} />)}
+
+                        {resPerPage < count && (
+                            <div className="d-flex justify-content-center mt-5">
+                                <Pagination
+                                    activePage={page}
+                                    itemsCountPerPage={resPerPage}
+                                    totalItemsCount={count}
+                                    onChange={handlePageClick}
+                                    nextPageText={"Next"}
+                                    prevPageText={"Prev"}
+                                    firstPageText={"First"}
+                                    lastPageText={"Last"}
+                                    itemClass="page-item"
+                                    linkClass="page-link"
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
