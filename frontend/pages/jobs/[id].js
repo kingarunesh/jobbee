@@ -3,9 +3,6 @@ import JobDetails from "../../components/job/JobDetails";
 import Layout from "../../components/layout/Layout";
 
 export default function JobDetailPage({ job, candidates }) {
-    console.log(job);
-    console.log(candidates);
-
     return (
         <Layout>
             <JobDetails job={job} candidates={candidates} />

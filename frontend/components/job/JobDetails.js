@@ -1,6 +1,27 @@
+import { useEffect } from "react";
 import moment from "moment";
+import "mapbox-gl/dist/mapbox-gl.css";
+import mapboxgl from "mapbox-gl";
+
+mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN;
 
 const JobDetails = ({ job, candidates }) => {
+    const coordinate = job.point.split("(")[1].replace(")", "").split(" ");
+
+    console.log(coordinate);
+
+    useEffect(() => {
+        const map = new mapboxgl.Map({
+            container: "job-map",
+            style: "mapbox://styles/mapbox/streets-v12",
+            center: coordinate,
+            zoom: 12,
+        });
+
+        //*     pointer
+        new mapboxgl.Marker().setLngLat(coordinate).addTo(map);
+    }, []);
+
     return (
         <>
             <div className="job-details-wrapper">
@@ -79,6 +100,8 @@ const JobDetails = ({ job, candidates }) => {
 
                                 <div className="job-location">
                                     <h4 className="mt-5 mb-4">Job Location</h4>
+
+                                    <div id="job-map" style={{ width: "100%", height: 500 }} />
                                 </div>
                             </div>
                         </div>
