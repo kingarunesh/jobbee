@@ -2,6 +2,8 @@ import Head from "next/head";
 import Script from "next/script";
 import Footer from "./Footer";
 import Header from "./Header";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Layout = ({ children, title = "Jobbee : Find Your Dream Job Now." }) => {
     return (
@@ -23,6 +25,8 @@ const Layout = ({ children, title = "Jobbee : Find Your Dream Job Now." }) => {
                 strategy="beforeInteractive"
                 src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
             ></Script>
+
+            <ToastContainer position="bottom-right" />
 
             <Header />
 
