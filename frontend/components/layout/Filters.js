@@ -1,9 +1,54 @@
-import React from "react";
+import { useRouter } from "next/router";
 
 const Filters = () => {
-    function handleClick(checkbox) {}
+    const router = useRouter();
 
-    function checkHandler(checkBoxType, checkBoxValue) {}
+    let queryParams;
+
+    if (typeof window !== "undefined") {
+        queryParams = new URLSearchParams(window.location.search);
+    }
+
+    function handleClick(checkbox) {
+        if (typeof window !== "undefined") {
+            const checkboxes = document.getElementsByName(checkbox.name);
+
+            checkboxes.forEach((item) => {
+                if (item !== checkbox) item.checked = false;
+            });
+        }
+
+        if (checkbox.checked === false) {
+            // delete filter from query
+            if (queryParams.has(checkbox.name)) {
+                queryParams.delete(checkbox.name);
+                router.replace({
+                    search: queryParams.toString(),
+                });
+            }
+        } else {
+            // set new filter value on query if query aready there
+            if (queryParams.has(checkbox.name)) {
+                queryParams.set(checkbox.name, checkbox.value);
+            } else {
+                queryParams.append(checkbox.name, checkbox.value);
+            }
+
+            router.replace({
+                search: queryParams.toString(),
+            });
+        }
+    }
+
+    function checkHandler(checkBoxType, checkBoxValue) {
+        if (typeof window !== "undefined") {
+            const value = queryParams.get(checkBoxType);
+
+            if (checkBoxValue === value) return true;
+
+            return false;
+        }
+    }
 
     return (
         <>
@@ -49,8 +94,8 @@ const Filters = () => {
                         type="checkbox"
                         name="jobType"
                         id="check3"
-                        value="Internship"
-                        defaultChecked={checkHandler("jobType", "Internship")}
+                        value="Intership"
+                        defaultChecked={checkHandler("jobType", "Intership")}
                         onClick={(e) => handleClick(e.target)}
                     />
                     <label className="form-check-label" htmlFor="check3">
@@ -161,8 +206,8 @@ const Filters = () => {
                         type="checkbox"
                         name="experience"
                         id="check10"
-                        value="3 Years above"
-                        defaultChecked={checkHandler("experience", "3 Years above")}
+                        value="3 Year above"
+                        defaultChecked={checkHandler("experience", "3 Year above")}
                         onClick={(e) => handleClick(e.target)}
                     />
                     <label className="form-check-label" htmlFor="check10">
