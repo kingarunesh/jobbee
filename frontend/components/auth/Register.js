@@ -1,15 +1,16 @@
 import Image from "next/image";
-import Link from "next/link";
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import AuthContext from "../../context/AuthContext";
 import { toast } from "react-toastify";
 
-const Login = () => {
+const Register = () => {
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const { loading, error, isAuthenticated, login, clearErrors } = useContext(AuthContext);
+    const { loading, error, isAuthenticated, register, clearErrors } = useContext(AuthContext);
     const router = useRouter();
 
     useEffect(() => {
@@ -26,7 +27,7 @@ const Login = () => {
     const submitHandler = (e) => {
         e.preventDefault();
 
-        login({ username: email, password });
+        register({ firstName, lastName, email, password });
     };
 
     return (
@@ -36,8 +37,8 @@ const Login = () => {
                     <div className="left">
                         <div style={{ width: "100%", height: "100%", position: "relative" }}>
                             <Image
-                                src="/images/login.svg"
-                                alt="login"
+                                src="/images/signup.svg"
+                                alt="register"
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 priority={true}
@@ -47,10 +48,32 @@ const Login = () => {
                     <div className="right">
                         <div className="rightContentWrapper">
                             <div className="headerWrapper">
-                                <h2> LOGIN</h2>
+                                <h2> SIGN UP</h2>
                             </div>
                             <form className="form" onSubmit={submitHandler}>
                                 <div className="inputWrapper">
+                                    <div className="inputBox">
+                                        <i aria-hidden className="fas fa-user"></i>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter First Name"
+                                            value={firstName}
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="inputBox">
+                                        <i aria-hidden className="fas fa-user-tie"></i>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Last name"
+                                            value={lastName}
+                                            onChange={(e) => setLastName(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
                                     <div className="inputBox">
                                         <i aria-hidden className="fas fa-envelope"></i>
                                         <input
@@ -68,18 +91,16 @@ const Login = () => {
                                             placeholder="Enter Your Password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
+                                            minLength={6}
                                             required
                                         />
                                     </div>
                                 </div>
-                                <div className="loginButtonWrapper">
-                                    <button type="submit" className="loginButton">
-                                        {loading ? "Authenticating..." : "Login"}
+                                <div className="registerButtonWrapper">
+                                    <button type="submit" className="registerButton">
+                                        {loading ? "Authenticating" : "Register"}
                                     </button>
                                 </div>
-                                <p style={{ textDecoration: "none" }} className="signup">
-                                    New to Jobbee? <Link href="/register">Create an account</Link>
-                                </p>
                             </form>
                         </div>
                     </div>
@@ -89,4 +110,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Register;

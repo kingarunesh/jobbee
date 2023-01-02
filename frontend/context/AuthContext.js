@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
                 password,
             });
 
-            if (res.data.username) {
+            if (res.data.message) {
                 setLoading(false);
                 router.push("/login");
             }
