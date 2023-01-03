@@ -38,6 +38,10 @@ const JobDetails = ({ job, candidates, access_token }) => {
         applyToJob(job.id, access_token);
     };
 
+    const d1 = moment(job.lastDate);
+    const d2 = moment(Date.now());
+    const isLastDatePassed = d1.diff(d2, "days") < 0 ? true : false;
+
     return (
         <>
             <div className="job-details-wrapper">
@@ -69,6 +73,7 @@ const JobDetails = ({ job, candidates, access_token }) => {
                                                 <button
                                                     className="btn btn-primary px-4 py-2 apply-btn"
                                                     onClick={applyToJobHandler}
+                                                    disabled={isLastDatePassed}
                                                 >
                                                     {loading ? "Loading..." : "Apply Now"}
                                                 </button>
@@ -149,14 +154,16 @@ const JobDetails = ({ job, candidates, access_token }) => {
                                 <p>{job.lastDate.substring(0, 10)}</p>
                             </div>
 
-                            <div className="mt-5 p-0">
-                                <div className="alert alert-danger">
-                                    <h5>Note:</h5>
-                                    You can no longer apply to this job. This job is expired. Last date to apply for this job was:{" "}
-                                    <b>15-2-2022</b>
-                                    <br /> Checkout others job on Jobbee.
+                            {isLastDatePassed && (
+                                <div className="mt-5 p-0">
+                                    <div className="alert alert-danger">
+                                        <h5>Note:</h5>
+                                        You can no longer apply to this job. This job is expired. Last date to apply for this job
+                                        was: <b>{job.lastDate.substring(0, 10)}</b>
+                                        <br /> Checkout others job on Jobbee.
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>
