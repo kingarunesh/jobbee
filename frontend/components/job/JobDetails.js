@@ -11,7 +11,7 @@ const JobDetails = ({ job, candidates, access_token }) => {
     const coordinate = job.point.split("(")[1].replace(")", "").split(" ");
 
     //*     apply to job
-    const { loading, error, updated, setUpdated, clearErrors, applyToJob, applied } = useContext(JobContext);
+    const { loading, error, updated, setUpdated, checkJobApplied, clearErrors, applyToJob, applied } = useContext(JobContext);
 
     console.log(coordinate);
 
@@ -30,6 +30,8 @@ const JobDetails = ({ job, candidates, access_token }) => {
             toast.error(error);
             clearErrors();
         }
+
+        checkJobApplied(job.id, access_token);
     }, [error]);
 
     const applyToJobHandler = () => {
