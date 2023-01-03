@@ -1,13 +1,13 @@
 import axios from "axios";
+import JobsApplied from "../../components/job/JobsApplied";
 import Layout from "../../components/layout/Layout";
 import { isAuthenticatedUser } from "../../utils/isAuthenticated";
 
 export default function JobAppliedPage({ jobs }) {
-    console.log(jobs);
     return (
         <>
             <Layout title="Jobs Applieds">
-                <h1>Jobs Applieds</h1>
+                <JobsApplied jobs={jobs} />
             </Layout>
         </>
     );
