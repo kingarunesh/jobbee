@@ -1,12 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import moment from "moment";
 import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "mapbox-gl";
+import JobContext from "../../context/JobContext";
+import { toast } from "react-toastify";
 
 mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN;
 
-const JobDetails = ({ job, candidates }) => {
+const JobDetails = ({ job, candidates, access_token }) => {
     const coordinate = job.point.split("(")[1].replace(")", "").split(" ");
+
+    //*     apply to job
+    const { loading, error, updated, setUpdated, clearErrors, applyToJob, applied } = useContext(JobContext);
 
     console.log(coordinate);
 
@@ -20,7 +25,16 @@ const JobDetails = ({ job, candidates }) => {
 
         //*     pointer
         new mapboxgl.Marker().setLngLat(coordinate).addTo(map);
-    }, []);
+
+        if (error) {
+            toast.error(error);
+            clearErrors();
+        }
+    }, [error]);
+
+    const applyToJobHandler = () => {
+        applyToJob(job.id, access_token);
+    };
 
     return (
         <>
@@ -42,7 +56,22 @@ const JobDetails = ({ job, candidates }) => {
 
                                     <div className="mt-3">
                                         <span>
-                                            <button className="btn btn-primary px-4 py-2 apply-btn">Apply Now</button>
+                                            {loading ? (
+                                                "Loading..."
+                                            ) : applied ? (
+                                                <button disabled className="btn btn-primary px-4 py-2 apply-btn">
+                                                    <i aria-hidden className="fas fa-check"></i>
+                                                    {loading ? "Loading..." : "Applied"}
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    className="btn btn-primary px-4 py-2 apply-btn"
+                                                    onClick={applyToJobHandler}
+                                                >
+                                                    {loading ? "Loading..." : "Apply Now"}
+                                                </button>
+                                            )}
+
                                             <span className="ml-4 text-success">
                                                 <b>{candidates}</b> candidates has applied to this job.
                                             </span>
@@ -54,7 +83,6 @@ const JobDetails = ({ job, candidates }) => {
                                     <h4>Description</h4>
                                     <p>{job.description}</p>
                                 </div>
-
                                 <div className="job-summary">
                                     <h4 className="mt-5 mb-4">Job Summary</h4>
                                     <table className="table table-striped">
@@ -97,7 +125,6 @@ const JobDetails = ({ job, candidates }) => {
                                         </tbody>
                                     </table>
                                 </div>
-
                                 <div className="job-location">
                                     <h4 className="mt-5 mb-4">Job Location</h4>
 
