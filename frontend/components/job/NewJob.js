@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import JobContext from "../../context/JobContext";
+import { jobTypeOptions, educationOptions, experienceOptions, industriesOptions } from "./data";
 
 const NewJob = ({ access_token }) => {
     const [title, setTitle] = useState("");
@@ -41,6 +42,8 @@ const NewJob = ({ access_token }) => {
             company,
         };
 
+        console.log(data);
+
         // newJob(data, access_token);
     };
 
@@ -54,13 +57,19 @@ const NewJob = ({ access_token }) => {
                             <i aria-hidden className="fas fa-copy mr-2"></i> POST A JOB
                         </h1>
                     </div>
-                    <form className="form">
+                    <form className="form" onSubmit={submitHandler}>
                         <div className="row">
                             <div className="col-12 col-md-6">
                                 <div className="inputWrapper">
                                     <div className="inputBox">
                                         <i aria-hidden className="fab fa-tumblr"></i>
-                                        <input type="text" placeholder="Enter Job Title" required />
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Job Title"
+                                            value={title}
+                                            onChange={(e) => setTitle(e.target.value)}
+                                            required
+                                        />
                                     </div>
                                     <div className="inputBox">
                                         <i aria-hidden className="fas fa-file-medical-alt"></i>
@@ -68,6 +77,8 @@ const NewJob = ({ access_token }) => {
                                             className="description"
                                             type="text"
                                             placeholder="Enter Job Description"
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
                                             required
                                         />
                                     </div>
@@ -78,24 +89,50 @@ const NewJob = ({ access_token }) => {
                                             placeholder="Enter Your Email"
                                             pattern="\S+@\S+\.\S+"
                                             title="Your email is invalid"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                             required
                                         />
                                     </div>
                                     <div className="inputBox">
                                         <i aria-hidden className="fas fa-map-marker-alt"></i>
-                                        <input type="text" placeholder="Enter Address" required />
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Address"
+                                            value={address}
+                                            onChange={(e) => setAddress(e.target.value)}
+                                            required
+                                        />
                                     </div>
                                     <div className="inputBox">
                                         <i aria-hidden className="fas fa-dollar-sign"></i>
-                                        <input type="number" placeholder="Enter Salary Range" required />
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Salary Range"
+                                            value={salary}
+                                            onChange={(e) => setSalary(e.target.value)}
+                                            required
+                                        />
                                     </div>
                                     <div className="inputBox">
                                         <i aria-hidden className="fas fa-users"></i>
-                                        <input type="number" placeholder="Enter No. of Positions" required />
+                                        <input
+                                            type="number"
+                                            placeholder="Enter No. of Positions"
+                                            value={positions}
+                                            onChange={(e) => setPositions(e.target.value)}
+                                            required
+                                        />
                                     </div>
                                     <div className="inputBox">
                                         <i aria-hidden className="fas fa-building"></i>
-                                        <input type="text" placeholder="Enter Company Name" required />
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Company Name"
+                                            value={company}
+                                            onChange={(e) => setCompany(e.target.value)}
+                                            required
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -103,8 +140,14 @@ const NewJob = ({ access_token }) => {
                                 <div className="boxWrapper">
                                     <h4>Job Types:</h4>
                                     <div className="selectWrapper">
-                                        <select className="classic">
-                                            <option>Business</option>
+                                        <select className="classic" value={jobType} onChange={(e) => setJobType(e.target.value)}>
+                                            {jobTypeOptions.map((option) => {
+                                                return (
+                                                    <option key={option} value={option}>
+                                                        {option}
+                                                    </option>
+                                                );
+                                            })}
                                         </select>
                                     </div>
                                 </div>
@@ -112,8 +155,18 @@ const NewJob = ({ access_token }) => {
                                 <div className="boxWrapper">
                                     <h4>Education:</h4>
                                     <div className="selectWrapper">
-                                        <select className="classic">
-                                            <option>Masters</option>
+                                        <select
+                                            className="classic"
+                                            value={education}
+                                            onChange={(e) => setEducation(e.target.value)}
+                                        >
+                                            {educationOptions.map((option) => {
+                                                return (
+                                                    <option key={option} value={option}>
+                                                        {option}
+                                                    </option>
+                                                );
+                                            })}
                                         </select>
                                     </div>
                                 </div>
@@ -121,8 +174,18 @@ const NewJob = ({ access_token }) => {
                                 <div className="boxWrapper">
                                     <h4>Industry:</h4>
                                     <div className="selectWrapper">
-                                        <select className="classic">
-                                            <option>Business</option>
+                                        <select
+                                            className="classic"
+                                            value={industry}
+                                            onChange={(e) => setIndustry(e.target.value)}
+                                        >
+                                            {industriesOptions.map((option) => {
+                                                return (
+                                                    <option key={option} value={option}>
+                                                        {option}
+                                                    </option>
+                                                );
+                                            })}
                                         </select>
                                     </div>
                                 </div>
@@ -130,15 +193,25 @@ const NewJob = ({ access_token }) => {
                                 <div className="boxWrapper">
                                     <h4>Experience:</h4>
                                     <div className="selectWrapper">
-                                        <select className="classic">
-                                            <option>No Experience</option>
+                                        <select
+                                            className="classic"
+                                            value={experience}
+                                            onChange={(e) => setExperience(e.target.value)}
+                                        >
+                                            {experienceOptions.map((option) => {
+                                                return (
+                                                    <option key={option} value={option}>
+                                                        {option}
+                                                    </option>
+                                                );
+                                            })}
                                         </select>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="col text-center mt-3">
-                                <button className="createButton">Create Job</button>
+                                <button className="createButton">{loading ? "Posting..." : "Create Job"}</button>
                             </div>
                         </div>
                     </form>
