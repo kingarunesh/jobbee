@@ -8,10 +8,30 @@ export const JobProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [updated, setUpdated] = useState(null);
+    const [created, setCreated] = useState(null);
     const [applied, setApplied] = useState(false);
     const [stats, setStats] = useState(false);
 
-    const router = useRouter();
+    //!     new job
+    const newJob = async (data, access_token) => {
+        try {
+            setLoading(true);
+
+            const res = await axios.post(`${process.env.API_URL}/api/jobs/new/`, data, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+
+            if (res.data) {
+                setLoading(false);
+                setCreated(true);
+            }
+        } catch (error) {
+            setLoading(false);
+            setError(error.response && (error.response.data.detail || error.response.data.error));
+        }
+    };
 
     //!     apply to job
     const applyToJob = async (id, access_token) => {
@@ -90,6 +110,9 @@ export const JobProvider = ({ children }) => {
                 checkJobApplied,
                 getTopicStats,
                 stats,
+                newJob,
+                created,
+                setCreated,
             }}
         >
             {children}

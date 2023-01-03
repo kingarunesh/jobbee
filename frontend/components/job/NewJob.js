@@ -16,14 +16,19 @@ const NewJob = ({ access_token }) => {
     const [positions, setPositions] = useState("");
     const [company, setCompany] = useState("");
 
-    const { error, clearErrors, loading } = useContext(JobContext);
+    const { error, clearErrors, loading, newJob, created, setCreated } = useContext(JobContext);
 
     useEffect(() => {
         if (error) {
             toast.error(error);
             clearErrors();
         }
-    }, [error]);
+
+        if (created) {
+            setCreated(false);
+            toast.success("Job Added");
+        }
+    }, [error, created]);
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -44,7 +49,7 @@ const NewJob = ({ access_token }) => {
 
         console.log(data);
 
-        // newJob(data, access_token);
+        newJob(data, access_token);
     };
 
     return (
