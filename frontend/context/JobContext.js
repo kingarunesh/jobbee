@@ -33,6 +33,27 @@ export const JobProvider = ({ children }) => {
         }
     };
 
+    //!     update job
+    const updateJob = async (id, data, access_token) => {
+        try {
+            setLoading(true);
+
+            const res = await axios.put(`${process.env.API_URL}/api/jobs/${id}/update/`, data, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+
+            if (res.data) {
+                setLoading(false);
+                setUpdated(true);
+            }
+        } catch (error) {
+            setLoading(false);
+            setError(error.response && (error.response.data.detail || error.response.data.error));
+        }
+    };
+
     //!     apply to job
     const applyToJob = async (id, access_token) => {
         try {
@@ -113,6 +134,7 @@ export const JobProvider = ({ children }) => {
                 newJob,
                 created,
                 setCreated,
+                updateJob,
             }}
         >
             {children}
